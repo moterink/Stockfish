@@ -648,6 +648,10 @@ namespace {
                         !(unsafeSquares & blockSq)        ?  9 :
                                                              0 ;
 
+                // If the pawn is supported by other pawns, assign a bonus
+                if (attackedBy[Us][PAWN] & s)
+                    k += 3;
+
                 // Assign a larger bonus if the block square is defended
                 if ((pos.pieces(Us) & bb) || (attackedBy[Us][ALL_PIECES] & blockSq))
                     k += 5;

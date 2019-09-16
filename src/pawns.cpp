@@ -62,6 +62,8 @@ namespace {
     { V(-10), V( -14), V(  90), V(15), V( 2), V( -7), V(-16) }
   };
 
+  constexpr Score KingOpenFile[2] = { S(10, 3), S(12, 4) };
+
   #undef S
   #undef V
 
@@ -200,6 +202,10 @@ Score Entry::evaluate_shelter(const Position& pos, Square ksq) {
 
       int d = std::min(f, ~f);
       bonus += make_score(ShelterStrength[d][ourRank], 0);
+
+      if (!ourRank && !theirRank) {
+          bonus -= KingOpenFile[f == file_of(ksq)];
+      }
 
       if (ourRank && (ourRank == theirRank - 1))
           bonus -= BlockedStorm * int(theirRank == RANK_3);

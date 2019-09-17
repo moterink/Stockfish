@@ -140,6 +140,7 @@ namespace {
   constexpr Score PawnlessFlank      = S( 17, 95);
   constexpr Score RestrictedPiece    = S(  7,  7);
   constexpr Score RookOnPawn         = S( 10, 32);
+  constexpr Score RookBehindPawn     = S(  7,  1);
   constexpr Score RookOnQueenFile    = S( 11,  4);
   constexpr Score SliderOnQueen      = S( 59, 18);
   constexpr Score ThreatByKing       = S( 24, 89);
@@ -350,6 +351,10 @@ namespace {
             // Bonus for rook on the same file as a queen
             if (file_bb(s) & pos.pieces(QUEEN))
                 score += RookOnQueenFile;
+
+            // Penalty for rook right behind pawn on first rank
+            if (relative_rank(Us, s) == RANK_1 && (shift<Down>(pos.pieces(Us, PAWN)) & s))
+                score -= RookBehindPawn;
 
             // Bonus for rook on an open or semi-open file
             if (pos.is_on_semiopen_file(Us, s))
